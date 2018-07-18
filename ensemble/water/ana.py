@@ -59,6 +59,7 @@ for a in algos:
             # being quiet and verbosity=3 being the most chatty),
             # and the filename is being used to plot the resulting distribution for
             # visual inspection.
+            print('==> Kinetic energy test of simulation' + e + '_' + a + '_' + str(n))
             pv.kinetic_energy.distribution(results[a][e][-1], strict=True, verbosity=2)
             pv.kinetic_energy.distribution(results[a][e][-1], strict=False, verbosity=2,
                                            filename='_'.join(['ke', a, e, str(n)]))
