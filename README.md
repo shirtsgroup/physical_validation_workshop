@@ -1,0 +1,50 @@
+Two tests are implemented here: 
+
+1. A test of whether the ensemble is correct, and
+2. A test of equipartition
+
+To run these tests, first install the `physical_validation` module by calling `pip install physical_validation`. (Note that a bug in a package `physical_validation` is depending on might require you to first install `pip install numpy scipy matplotlib` before installing `pip install physical_validation`.) `physical_validation` works under python>=3.3 as well as python2.7. Note, however, that python2.7 is deprecated, and its support might be dropped in a future release. We strongly encourage you to use python>=3.3.
+
+Full documentation:
+-------------------
+Please see https://physical-validation.readthedocs.io for the full documentation of the validation package.
+
+Directory structure:
+--------------------
+ensemble/
+	water/
+		ana.py		
+		top/
+		md_NVT_be_1/
+		md_NVT_vr_1/
+		md_NVT_be_2/
+		md_NVT_vr_2/
+
+		md_NPT_be_1/
+		md_NPT_vr_1/
+		md_NPT_be_2/
+		md_NPT_vr_2/
+		md_NPT_be_3/
+		md_NPT_vr_3/
+		md_NPT_be_4/
+		md_NPT_vr_4/
+
+`python3 ana.py` performs the ensemble checks on a system of 900 water molecules. The `md_*` folders contain results of simulations ran in different ensembles (NVT, NPT), using different thermostats ('vr' stands for velocity-rescale, 'be' for Berendsen thermostat), and at different state points (NVT: 1: T, 2: T+dT; NPT: 1: (T, P), 2: (T+dT, P), 3: (T, P+dP), 4: (T+dT, P+dP)). The `top/` folder contains the topology of the system.
+
+equipartition/
+	trp-cage/
+		ana.py
+		be_1/
+		be_2/
+		vr_1/
+		vr_2/
+
+`python3 ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time.
+
+Some output notation used by the validation tools:
+--------------------------------------------------
+* Before analyzing distributions, the trajectories are analyzed to improve the statistical efficiency of the sample. This consists of three steps:
+  1. Equilibration: Any data points at the beginning of the trajectory which are not yet equilibrated are ignored.
+  2. Decorrelation: After equilibration, the remaining data points are analyzed for their time correlation. If samples are found to be correlated, only a subset is used.
+  3. Trail pruning (optional): To avoid numerical noise to strongly influence the fitting of small data sets, the extreme values of the simulation might be discarded.
+  The result of this procedure is reported as `After equilibration, decorrelation and tail pruning, XX% (YYY frames) of original Trajectory remain.`
