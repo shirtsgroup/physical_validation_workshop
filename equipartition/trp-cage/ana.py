@@ -44,6 +44,6 @@ for d in dirs:
     # the second denotes the filename for the plotting,
     # and the third sets the level of detail of the output (with
     # verbosity=0 being quiet and verbosity=3 being the most chatty).
-    pv.kinetic_energy.equipartition(results_protein,
+    pv.kinetic_energy.equipartition(results_protein,strict=True,
                                     filename='equipartition_'+str(d),
-                                    verbosity=2)
+                                    verbosity=3)
