@@ -1,29 +1,46 @@
-#MRS: why set env here, not in other script? should be consistent to not confuse people
-#!/usr/bin/env python3
-
-# full documentation at http://physical-validation.readthedocs.io/
+# Full documentation at http://physical-validation.readthedocs.io/
 import physical_validation as pv
 
-#MRS: is there a reason gmx_d vs. gmx? 
-# setting the data parser. Needed if reading from GROMACS files.
-# Place your gromacs binary and shared topology file here.
-gmx = pv.data.GromacsParser(exe='gmx_d',
-                            includepath='/usr/local/share/gromacs/top/')
+# Create a GROMACS parser, needs the location of the GROMACS executable
+# and the location of the topology include folder.
+# Here, we assume that `gmx` is in the PATH, and that the topology
+# folder is in its standard location.
+gmx = pv.data.GromacsParser(exe='gmx',
+                            includepath='/home/pascal/bin/gromacs/2018/single/share/gromacs/top/')
+#                            includepath='/usr/local/share/gromacs/top/')
 
-algos = ['vr', 'be'] # two thermostats: velocity-rescaling and berendsen (weak-coupling)
-ensembles = ['NVT', 'NPT'] # two ensembles: NVT and NPT
+# We'll test simulations ran with two thermostats:
+# 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat.
+algos = ['vr', 'be']
+# We'll test simulations performed in two ensembles: NVT and NPT
+# Note that in NPT, the 'vr' thermostat was complemented with a
+# Parinello-Rahman barostat, while the 'be' thermostat was complemented
+# with a Berendsen barostat.
+ensembles = ['NVT', 'NPT']
+# The number of simulations for each ensemble
 sims = {
-    'NPT': 4, # we use 4 simulations for NPT: (T,P), (T+dT,P), (T,P+dP), (T+dT,P+dP)
-    'NVT': 2  # we need 2 simulations for NVT: T and T+dT
+    'NPT': 4, # We use 4 simulations for NPT: (T,P), (T+dT,P), (T,P+dP), (T+dT,P+dP)
+    'NVT': 2  # We need 2 simulations for NVT: T and T+dT
 }
 
-results = {} # dictionary we will store the parsed data in
+# Dictionary we will store the parsed data in
+results = {}
+
+# Loop over the different thermostats and ensembles
 for a in algos:
     results[a] = {}
     for e in ensembles:
         results[a][e] = []
+        # Parse 4 simulations for NPT, 2 simulations for NVT
         for n in range(1, sims[e]+1):
+            # Set directory
             d = 'md_' + e + '_' + a + '_' + str(n) + '/'
+            # Read in the simulation results using the GROMACS parser.
+            # This uses the `mdp` parameter file and the `top` topology file
+            # to gather information about the system and the simulation settings,
+            # and read the results from the `edr` file (trajectory of energy /
+            # volume / pressure / ...) and the `gro` file (position and velocity
+            # snapshot - used to read the box volume in NVT)
             results[a][e].append(
                 gmx.get_simulation_data(
                     mdp=d + 'mdout.mdp',
@@ -32,16 +49,34 @@ for a in algos:
                     gro=d + 'system.gro'
                 )
             )
-            #MRS: add comments: what do strict and verbosity do
-            pv.kinetic_energy.distribution(results[a][e][-1], strict=False, verbosity=2)
+            
+            # Test the kinetic energy distribution of the simulation result
+            # read in last.
+            # The first input is the simulation results read in,
+            # `strict` determines whether we test the full distribution (True)
+            # or only determine the mean and the variance of the distribution (False),
+            # `verbosity` sets the level of detail of the output  (with verbosity=0
+            # being quiet and verbosity=3 being the most chatty),
+            # and the filename is being used to plot the resulting distribution for
+            # visual inspection.
+            pv.kinetic_energy.distribution(results[a][e][-1], strict=True, verbosity=2)
             pv.kinetic_energy.distribution(results[a][e][-1], strict=False, verbosity=2,
                                            filename='_'.join(['ke', a, e, str(n)]))
 
-        # add comments here on the inputs    
+        # Now that we have all simulations of the current thermostat and ensemble
+        # read in, we can test the distribution of the potential energy and (for NPT)
+        # the volume. While the first two inputs to the tests are the parsed simulation
+        # results, `verbosity` sets the level of detail of the output  (with verbosity=0
+        # being quiet and verbosity=3 being the most chatty), and the filename is being
+        # used to plot the resulting distribution for visual inspection.
         if e == 'NVT':
-            pv.ensemble.check(results[a][e][0], results[a][e][1], verbosity=2, filename='_'.join(['pe', a, e]))
+            pv.ensemble.check(results[a][e][0], results[a][e][1],
+                              verbosity=2, filename='_'.join(['pe', a, e]))
         else:
-            # there are three checks we can do: P(E_1)/P(E_2), P(V_1)/P(V_2) and P(E_1,V_1)/P(E_2,V_2)
-            pv.ensemble.check(results[a][e][0], results[a][e][1], verbosity=2, filename='_'.join(['pe', a, e, 'dT']))
-            pv.ensemble.check(results[a][e][0], results[a][e][2], verbosity=2, filename='_'.join(['pe', a, e, 'dP']))
-            pv.ensemble.check(results[a][e][0], results[a][e][3], verbosity=2)
+            # There are three checks we can do: P(E_1)/P(E_2), P(V_1)/P(V_2) and P(E_1,V_1)/P(E_2,V_2)
+            pv.ensemble.check(results[a][e][0], results[a][e][1],
+                              verbosity=2, filename='_'.join(['pe', a, e, 'dT']))
+            pv.ensemble.check(results[a][e][0], results[a][e][2],
+                              verbosity=2, filename='_'.join(['pe', a, e, 'dP']))
+            pv.ensemble.check(results[a][e][0], results[a][e][3],
+                              verbosity=2) # Plotting for the 2D case is not supported
