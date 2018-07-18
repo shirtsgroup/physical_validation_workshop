@@ -43,7 +43,7 @@ ensemble = pv.data.EnsembleData(
 )
 
 # We can now read in our flat data files (1-dimensional ascii files containing
-# energy trajectories), and create simulation result representation usable by
+# energy trajectories), and create a simulation result representation usable by
 # the physical validation tests.
 result = parser.get_simulation_data(
     units=units, ensemble=ensemble, system=system,
@@ -52,7 +52,7 @@ result = parser.get_simulation_data(
     total_ene_file='total_energy.dat'
 )
 
-# As previously, we can now test, for example, the kinetic energy using the
+# As with the other parsers, we can now test, for example, the kinetic energy using the
 # created simulation result data structure, where
 # the first input is the simulation results read in,
 # `strict` determines whether we test the full distribution (True)
