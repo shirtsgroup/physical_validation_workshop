@@ -5,6 +5,10 @@ Two tests are implemented here:
 
 To run these tests, first install the `physical_validation` module by calling `pip install physical_validation`. (Note that a bug in a package `physical_validation` is depending on might require you to first install `pip install numpy scipy matplotlib` before installing `pip install physical_validation`.) `physical_validation` works under python>=3.3 as well as python2.7. Note, however, that python2.7 is deprecated, and its support might be dropped in a future release. We strongly encourage you to use python>=3.3.
 
+Full documentation:
+-------------------
+Please see https://physical-validation.readthedocs.io for the full documentation of the validation package.
+
 Directory structure:
 --------------------
 ensemble/
