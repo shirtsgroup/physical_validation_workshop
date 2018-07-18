@@ -6,8 +6,7 @@ import physical_validation as pv
 # Here, we assume that `gmx` is in the PATH, and that the topology
 # folder is in its standard location.
 gmx = pv.data.GromacsParser(exe='gmx',
-                            includepath='/home/pascal/bin/gromacs/2018/single/share/gromacs/top/')
-#                            includepath='/usr/local/share/gromacs/top/')
+                            includepath='/usr/local/share/gromacs/top/')
 
 # We'll test simulations ran with two thermostats:
 # 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat.
