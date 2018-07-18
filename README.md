@@ -40,12 +40,13 @@ Directory structure:
 			vr_1/
 			vr_2/
 
-`python3 ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time.
+`python3 ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time for the workshop, so only the solute kinetic energy is analyzed.
 
 Some output notation used by the validation tools:
 --------------------------------------------------
-* Before analyzing distributions, the trajectories are analyzed to improve the statistical efficiency of the sample. This consists of three steps:
-  1. Equilibration: Any data points at the beginning of the trajectory which are not yet equilibrated are ignored.
-  2. Decorrelation: After equilibration, the remaining data points are analyzed for their time correlation. If samples are found to be correlated, only a subset is used.
-  3. Trail pruning (optional): To avoid numerical noise to strongly influence the fitting of small data sets, the extreme values of the simulation might be discarded.
-  The result of this procedure is reported as `After equilibration, decorrelation and tail pruning, XX% (YYY frames) of original Trajectory remain.`
+* Before analyzing the distributions, the trajectories are analyzed to obtain uncorrelated samples and remove unequilibrated data. This consists of three steps:
+  1. Equilibration: Any data points at the beginning of the trajectory which are not yet equilibrated (simulation has reached steady state) are ignored.
+  2. Decorrelation: After equilibration, the remaining data points are analyzed for correlations in time. If samples are found to be correlated, only a decorrelated subset is used.
+  3. Tail pruning (optional): To avoid numerical noise to strongly influence the fitting of small data sets, the extreme values of the simulation might be discarded.
+  The result of this procedure is reported as `After equilibration, decorrelation and tail pruning, XX% (YYY frames) of original trajectory remain.`
+
