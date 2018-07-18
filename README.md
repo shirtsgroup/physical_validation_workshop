@@ -11,33 +11,34 @@ Please see https://physical-validation.readthedocs.io for the full documentation
 
 Directory structure:
 --------------------
-ensemble/
-	water/
-		ana.py		
-		top/
-		md_NVT_be_1/
-		md_NVT_vr_1/
-		md_NVT_be_2/
-		md_NVT_vr_2/
 
-		md_NPT_be_1/
-		md_NPT_vr_1/
-		md_NPT_be_2/
-		md_NPT_vr_2/
-		md_NPT_be_3/
-		md_NPT_vr_3/
-		md_NPT_be_4/
-		md_NPT_vr_4/
+	ensemble/
+		water/
+			ana.py		
+			top/
+			md_NVT_be_1/
+			md_NVT_vr_1/
+			md_NVT_be_2/
+			md_NVT_vr_2/
+
+			md_NPT_be_1/
+			md_NPT_vr_1/
+			md_NPT_be_2/
+			md_NPT_vr_2/
+			md_NPT_be_3/
+			md_NPT_vr_3/
+			md_NPT_be_4/
+			md_NPT_vr_4/
 
 `python3 ana.py` performs the ensemble checks on a system of 900 water molecules. The `md_*` folders contain results of simulations ran in different ensembles (NVT, NPT), using different thermostats ('vr' stands for velocity-rescale, 'be' for Berendsen thermostat), and at different state points (NVT: 1: T, 2: T+dT; NPT: 1: (T, P), 2: (T+dT, P), 3: (T, P+dP), 4: (T+dT, P+dP)). The `top/` folder contains the topology of the system.
 
-equipartition/
-	trp-cage/
-		ana.py
-		be_1/
-		be_2/
-		vr_1/
-		vr_2/
+	equipartition/
+		trp-cage/
+			ana.py
+			be_1/
+			be_2/
+			vr_1/
+			vr_2/
 
 `python3 ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time.
 
