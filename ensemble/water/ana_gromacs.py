@@ -23,13 +23,13 @@ sims = {
 }
 
 # Dictionary we will store the parsed data in
-results = {}
+simulations = {}
 
 # Loop over the different thermostats and ensembles
 for a in algos:
-    results[a] = {}
+    simulations[a] = {}
     for e in ensembles:
-        results[a][e] = []
+        simulations[a][e] = []
         # Parse 4 simulations for NPT, 2 simulations for NVT
         for n in range(1, sims[e]+1):
             # Set directory
@@ -40,7 +40,7 @@ for a in algos:
             # and read the results from the `edr` file (trajectory of energy /
             # volume / pressure / ...) and the `gro` file (position and velocity
             # snapshot - used to read the box volume in NVT)
-            results[a][e].append(
+            simulations[a][e].append(
                 gmx.get_simulation_data(
                     mdp=d + 'mdout.mdp',
                     top='top/system.top',
@@ -59,8 +59,8 @@ for a in algos:
             # and the filename is being used to plot the resulting distribution for
             # visual inspection.
             print('==> Kinetic energy test of simulation' + e + '_' + a + '_' + str(n))
-            pv.kinetic_energy.distribution(results[a][e][-1], strict=True, verbosity=2)
-            pv.kinetic_energy.distribution(results[a][e][-1], strict=False, verbosity=2,
+            pv.kinetic_energy.distribution(simulations[a][e][-1], strict=True, verbosity=2)
+            pv.kinetic_energy.distribution(simulations[a][e][-1], strict=False, verbosity=2,
                                            filename='_'.join(['ke', a, e, str(n)]))
 
         # Now that we have all simulations of the current thermostat and ensemble
@@ -70,13 +70,13 @@ for a in algos:
         # being quiet and verbosity=3 being the most chatty), and the filename is being
         # used to plot the resulting distribution for visual inspection.
         if e == 'NVT':
-            pv.ensemble.check(results[a][e][0], results[a][e][1],
+            pv.ensemble.check(simulations[a][e][0], simulations[a][e][1],
                               verbosity=2, filename='_'.join(['pe', a, e]))
         else:
             # There are three checks we can do: P(E_1)/P(E_2), P(V_1)/P(V_2) and P(E_1,V_1)/P(E_2,V_2)
-            pv.ensemble.check(results[a][e][0], results[a][e][1],
+            pv.ensemble.check(simulations[a][e][0], simulations[a][e][1],
                               verbosity=2, filename='_'.join(['pe', a, e, 'dT']))
-            pv.ensemble.check(results[a][e][0], results[a][e][2],
+            pv.ensemble.check(simulations[a][e][0], simulations[a][e][2],
                               verbosity=2, filename='_'.join(['pe', a, e, 'dP']))
-            pv.ensemble.check(results[a][e][0], results[a][e][3],
+            pv.ensemble.check(simulations[a][e][0], simulations[a][e][3],
                               verbosity=2) # Plotting for the 2D case is not supported

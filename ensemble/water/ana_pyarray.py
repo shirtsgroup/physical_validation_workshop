@@ -32,15 +32,7 @@ units = pv.data.UnitData(
     time_conversion=1.0
 )
 
-# The example simulation was performed in a NVT ensemble
-ensemble = pv.data.EnsembleData(
-    ensemble='NVT',
-    natoms=900*3,
-    volume=3.01125**3,
-    temperature=300
-)
-
-# For the flat file example, we will only look at the simulations performed under
+# For the python array example, we will only look at the simulations performed under
 # NVT conditions using the velocity-rescale thermostat. There are two simulations:
 # One ran at 300K, and one ran at 308K.
 ensemble_1 = pv.data.EnsembleData(
