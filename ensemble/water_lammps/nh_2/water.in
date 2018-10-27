@@ -43,4 +43,4 @@ thermo_style multi
 thermo 100
 dump myDump all custom 1000 dump.atom x y z vx vy vz
 
-run 20000
+run 200000
