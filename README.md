@@ -15,8 +15,11 @@ Directory structure:
 	ensemble/
 		water/
 			ana_gromacs.py
+			ana_gromacs.ipynb
 			ana_flatfile.py
+			ana_flatfile.ipynb
 			ana_pyarray.py
+			ana_pyarray.ipynb
 			top/
 			md_NVT_be_1/
 			md_NVT_vr_1/
@@ -32,21 +35,22 @@ Directory structure:
 			md_NPT_be_4/
 			md_NPT_vr_4/
 
-`python ana.py` performs the ensemble checks on a system of 900 water molecules. The `md_*` folders contain results of GROMACS simulations ran in different ensembles (NVT, NPT), using different thermostats ('vr' stands for velocity-rescale, 'be' for Berendsen thermostat), and at different state points (NVT: 1: T, 2: T+dT; NPT: 1: (T, P), 2: (T+dT, P), 3: (T, P+dP), 4: (T+dT, P+dP)). The `top/` folder contains the topology of the system.
+`python ana.py` performs the ensemble checks on a system of 900 water molecules. The `md_*` folders contain results of GROMACS simulations ran in different ensembles (NVT, NPT), using different thermostats ('vr' stands for velocity-rescale, 'be' for Berendsen thermostat), and at different state points (NVT: 1: T, 2: T+dT; NPT: 1: (T, P), 2: (T+dT, P), 3: (T, P+dP), 4: (T+dT, P+dP)). The `top/` folder contains the topology of the system. The Python notebooks implement the same tests.
 
-`python ana_flatfile.py` performs the same NVT ensemble checks on the velocity rescale data set, with the data loaded from an ASCII files with a list of energies.
+`python ana_flatfile.py` performs the same NVT ensemble checks on the velocity rescale data set, with the data loaded from an ASCII files with a list of energies. The Python notebooks implement the same tests.
 
-`python ana_numpy.py` performs the same NVT ensemble checks on the velocity rescale data set, with the data loaded from a numpy array of energies.
+`python ana_numpy.py` performs the same NVT ensemble checks on the velocity rescale data set, with the data loaded from a numpy array of energies. The Python notebooks implement the same tests.
  
 	equipartition/
 		trp-cage/
 			ana.py
+			ana.ipynb
 			be_1/
 			be_2/
 			vr_1/
 			vr_2/
 
-`python ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time for the workshop, so only the solute kinetic energy is analyzed.  `tot` is the total kinetic energy, `tra` is translational kinetic energy of the group, `rni` is the rotational plus internal, `rot` is the rotational kinetic energy, and `int` is the interna kinetic energy.
+`python ana.py` performs the equipartition check on a Trp-cage protein. The `be_*` and `vr_*` folders contain results of simulations ran in NPT using different thermostatting schemes: 'vr' stands for velocity-rescale, 'be' for Berendsen thermostat, while '_1' denotes a simulation using a single thermostat for the entire system, and '_2' denotes a simulation using two separate thermostats, one for the protein and one for the solvent. Note that the solvent was stripped from the trajectory files to considerably reduce file size and execution time for the workshop, so only the solute kinetic energy is analyzed.  `tot` is the total kinetic energy, `tra` is translational kinetic energy of the group, `rni` is the rotational plus internal, `rot` is the rotational kinetic energy, and `int` is the interna kinetic energy. The Python notebooks implement the same tests.
 
 Some output notation used by the validation tools:
 --------------------------------------------------
