@@ -1,4 +1,4 @@
-Two tests are implemented here: 
+Two tests are implemented in these notebooks
 
 1. A test of whether the ensemble is correct, and
 2. A test of equipartition
